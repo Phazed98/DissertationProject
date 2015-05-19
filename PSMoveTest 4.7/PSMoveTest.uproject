@@ -1,0 +1,13 @@
+{
+	"FileVersion": 3,
+	"EngineAssociation": "{C42240AA-48B2-5CDF-2866-A38DF94BAAB1}",
+	"Category": "",
+	"Description": "",
+	"Modules": [
+		{
+			"Name": "PSMoveTest",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		}
+	]
+}
