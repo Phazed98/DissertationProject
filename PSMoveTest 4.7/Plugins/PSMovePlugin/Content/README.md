@@ -1,1 +1,0 @@
-TODO: Provide a static mesh to represent the PSMove.

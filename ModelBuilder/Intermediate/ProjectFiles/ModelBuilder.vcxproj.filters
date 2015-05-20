@@ -1,0 +1,79 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<ItemGroup>
+		<None Include="..\..\ModelBuilder.uproject" />
+		<Filter Include="Source">
+			<UniqueIdentifier>{7E392B41-1899-475A-A035-BE31C1D83D6F}</UniqueIdentifier>
+		</Filter>
+		<None Include="..\..\Source\ModelBuilder.Target.cs">
+			<Filter>Source</Filter>
+		</None >
+		<None Include="..\..\Source\ModelBuilderEditor.Target.cs">
+			<Filter>Source</Filter>
+		</None >
+		<Filter Include="Config">
+			<UniqueIdentifier>{C18A0F65-C86A-4767-8292-08070D650798}</UniqueIdentifier>
+		</Filter>
+		<None Include="..\..\Config\DefaultEditor.ini">
+			<Filter>Config</Filter>
+		</None >
+		<None Include="..\..\Config\DefaultEditorUserSettings.ini">
+			<Filter>Config</Filter>
+		</None >
+		<None Include="..\..\Config\DefaultEngine.ini">
+			<Filter>Config</Filter>
+		</None >
+		<None Include="..\..\Config\DefaultGame.ini">
+			<Filter>Config</Filter>
+		</None >
+		<None Include="..\..\Config\DefaultInput.ini">
+			<Filter>Config</Filter>
+		</None >
+		<Filter Include="Source\ModelBuilder">
+			<UniqueIdentifier>{ADFF3CA6-5C8A-460C-9A71-75C65499E350}</UniqueIdentifier>
+		</Filter>
+		<None Include="..\..\Source\ModelBuilder\ModelBuilder.Build.cs">
+			<Filter>Source\ModelBuilder</Filter>
+		</None >
+		<ClCompile Include="..\..\Source\ModelBuilder\ModelBuilder.cpp">
+			<Filter>Source\ModelBuilder</Filter>
+		</ClCompile >
+		<ClInclude Include="..\..\Source\ModelBuilder\ModelBuilder.h">
+			<Filter>Source\ModelBuilder</Filter>
+		</ClInclude >
+		<ClCompile Include="..\..\Source\ModelBuilder\ModelBuilderCharacter.cpp">
+			<Filter>Source\ModelBuilder</Filter>
+		</ClCompile >
+		<ClInclude Include="..\..\Source\ModelBuilder\ModelBuilderCharacter.h">
+			<Filter>Source\ModelBuilder</Filter>
+		</ClInclude >
+		<ClCompile Include="..\..\Source\ModelBuilder\ModelBuilderGameMode.cpp">
+			<Filter>Source\ModelBuilder</Filter>
+		</ClCompile >
+		<ClInclude Include="..\..\Source\ModelBuilder\ModelBuilderGameMode.h">
+			<Filter>Source\ModelBuilder</Filter>
+		</ClInclude >
+		<ClCompile Include="..\..\Source\ModelBuilder\ModelBuilderHUD.cpp">
+			<Filter>Source\ModelBuilder</Filter>
+		</ClCompile >
+		<ClInclude Include="..\..\Source\ModelBuilder\ModelBuilderHUD.h">
+			<Filter>Source\ModelBuilder</Filter>
+		</ClInclude >
+		<ClCompile Include="..\..\Source\ModelBuilder\ModelBuilderProjectile.cpp">
+			<Filter>Source\ModelBuilder</Filter>
+		</ClCompile >
+		<ClInclude Include="..\..\Source\ModelBuilder\ModelBuilderProjectile.h">
+			<Filter>Source\ModelBuilder</Filter>
+		</ClInclude >
+		<Filter Include="Source\ModelBuilder\Resources">
+			<UniqueIdentifier>{86A77059-4F86-4E4D-A8D6-B90015768BE6}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="Source\ModelBuilder\Resources\Windows">
+			<UniqueIdentifier>{D80CE17E-D227-4FAF-A6D7-8B6F9122C696}</UniqueIdentifier>
+		</Filter>
+		<ResourceCompile Include="..\..\Source\ModelBuilder\Resources\Windows\ModelBuilder.rc">
+			<Filter>Source\ModelBuilder\Resources\Windows</Filter>
+		</ResourceCompile >
+	</ItemGroup>
+</Project>
