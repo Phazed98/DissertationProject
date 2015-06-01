@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "ModelActor.h"
 #include "GameFramework/Actor.h"
 #include "HandActor.generated.h"
 
@@ -36,6 +37,12 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Weapon")
 	void checkObjects();
 
+	//Should be called when Trigger is pulled
+	UFUNCTION(BlueprintCallable, Category = "Weapon")
+		void releaseObjects();
 
+
+
+	AModelActor* currentHeldObject;
 
 };

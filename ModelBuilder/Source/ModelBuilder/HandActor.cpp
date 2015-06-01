@@ -2,7 +2,7 @@
 
 #include "ModelBuilder.h"
 #include "HandActor.h"
-#include "ModelActor.h"
+
 
 
 // Sets default values
@@ -44,6 +44,11 @@ void AHandActor::Tick( float DeltaTime )
 
 void AHandActor::checkObjects()
 {
+	//If already Holdinng an Object, move along
+	if (currentHeldObject)
+		return;
+
+
 	//Get all overlapping acotrs and store them
 	TArray<AActor*> CollectedActors;
 
@@ -58,16 +63,23 @@ void AHandActor::checkObjects()
 		}
 		//Cast Here to our type
 		//TODO Create type with Mesh and Cast to it
-		AActor* const testActor = Cast<AModelActor>(CollectedActors[x]);
+		AModelActor* const testActor = Cast<AModelActor>(CollectedActors[x]);
 		if (testActor)
 		{
-
-			testActor->AttachRootComponentToActor(this, NAME_None, EAttachLocation::KeepRelativeOffset);
-			//testActor->AttachRootComponentToActor(this);
-			//testActor->AttachRootComponentTo(RootComponent);
-			//testActor->DetachRootComponentFromParent();
+			currentHeldObject = testActor;
+			testActor->AttachRootComponentToActor(this, NAME_None, EAttachLocation::KeepWorldPosition, true);
 		}
 	}
 
+}
+
+void AHandActor::releaseObjects()
+{
+	//If already Holdinng an Object, move along
+	if (!currentHeldObject)
+		return;
+
+	currentHeldObject->DetachRootComponentFromParent();
+	currentHeldObject = NULL;
 }
 

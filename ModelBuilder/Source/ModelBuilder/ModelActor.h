@@ -27,6 +27,8 @@ public:
 	//Base Static Mesh
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = Hands)
 		UStaticMeshComponent* ModelActorMesh;
+
+
 	
 	
 };
