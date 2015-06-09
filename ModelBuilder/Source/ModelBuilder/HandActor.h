@@ -33,14 +33,19 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Hands)
 	USphereComponent* InteractionSphere;
 
+	//Release Sphere is slightly larger in order to release objects more garunteed
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Hands)
+		USphereComponent* ReleaseSphere;
+
 	//Should be called when Trigger is pulled
 	UFUNCTION(BlueprintCallable, Category = "Weapon")
 	void checkObjects();
 
 	//Should be called when Trigger is pulled
 	UFUNCTION(BlueprintCallable, Category = "Weapon")
-		void releaseObjects();
+	void releaseObjects();
 
+	TArray<AModelActor*> heldObjects;
 
 
 	AModelActor* currentHeldObject;

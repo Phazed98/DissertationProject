@@ -28,7 +28,13 @@ public:
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = Hands)
 		UStaticMeshComponent* ModelActorMesh;
 
+	//Interaction Sphere to determine objects that are in range to be interacted with the PSMove controller
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Hands)
+		USphereComponent* InteractionSphere;
 
-	
+	//Should be called when Trigger is pulled
+	UFUNCTION(BlueprintCallable, Category = "Weapon")
+		void connectToParent();
+
 	
 };

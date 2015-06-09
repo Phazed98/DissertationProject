@@ -22,7 +22,13 @@ AHandActor::AHandActor(const FObjectInitializer& ObjectInitializer) : Super(Obje
 	//Sphere to interact with objects
 	InteractionSphere = ObjectInitializer.CreateDefaultSubobject<USphereComponent>(this, TEXT("InteractionSphere"));
 	InteractionSphere->AttachTo(RootComponent);
-	InteractionSphere->SetSphereRadius(5.0f);
+	InteractionSphere->SetSphereRadius(10);
+
+
+	//Sphere to interact with objects
+	ReleaseSphere = ObjectInitializer.CreateDefaultSubobject<USphereComponent>(this, TEXT("ReleaseSphere"));
+	ReleaseSphere->AttachTo(RootComponent);
+	ReleaseSphere->SetSphereRadius(12);
 
 	//InputComponent->BindAction("Attach", IE_Pressed, this, &AHandActor::checkObjects);
 }
@@ -45,9 +51,8 @@ void AHandActor::Tick( float DeltaTime )
 void AHandActor::checkObjects()
 {
 	//If already Holdinng an Object, move along
-	if (currentHeldObject)
+	if (heldObjects.Num() > 0)
 		return;
-
 
 	//Get all overlapping acotrs and store them
 	TArray<AActor*> CollectedActors;
@@ -62,12 +67,16 @@ void AHandActor::checkObjects()
 			continue;
 		}
 		//Cast Here to our type
-		//TODO Create type with Mesh and Cast to it
 		AModelActor* const testActor = Cast<AModelActor>(CollectedActors[x]);
+	
 		if (testActor)
 		{
 			currentHeldObject = testActor;
+			testActor->DetachRootComponentFromParent();
 			testActor->AttachRootComponentToActor(this, NAME_None, EAttachLocation::KeepWorldPosition, true);
+			testActor->ModelActorMesh->SetRenderCustomDepth(true);
+			heldObjects.Add(testActor);
+			break;
 		}
 	}
 
@@ -75,11 +84,54 @@ void AHandActor::checkObjects()
 
 void AHandActor::releaseObjects()
 {
+
+	//Get all overlapping acotrs and store them
+	TArray<AActor*> CollectedActors;
+
+	for (int x = 0; x < heldObjects.Num(); x++)
+	{
+		heldObjects[x]->DetachRootComponentFromParent();
+		heldObjects[x]->connectToParent();
+		heldObjects[x]->ModelActorMesh->SetRenderCustomDepth(false);
+	}
+
+	heldObjects.Empty();
+
+	return;
+
+	ReleaseSphere->GetOverlappingActors(CollectedActors);
+
+	//For Each Actor
+	for (int x = 0; x < CollectedActors.Num(); ++x)
+	{
+		if (x == 0)
+		{
+			continue;
+		}
+		//Cast Here to our type
+		AModelActor* const testActor = Cast<AModelActor>(CollectedActors[x]);
+
+
+		if (testActor)
+		{
+			if (testActor->GetAttachParentActor() == this)
+			{
+				testActor->DetachRootComponentFromParent();
+				testActor->connectToParent();
+				testActor->ModelActorMesh->SetRenderCustomDepth(false);
+			}
+		}
+	}
+
+	return;
+
+
 	//If already Holdinng an Object, move along
 	if (!currentHeldObject)
 		return;
 
 	currentHeldObject->DetachRootComponentFromParent();
+	currentHeldObject->connectToParent();
 	currentHeldObject = NULL;
 }
 
