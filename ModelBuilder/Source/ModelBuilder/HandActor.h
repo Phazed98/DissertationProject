@@ -45,6 +45,10 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Weapon")
 	void releaseObjects();
 
+	//Should be called when Trigger is pulled
+	UFUNCTION(BlueprintCallable, Category = "Weapon")
+		void disConnectAllObjects();
+
 	TArray<AModelActor*> heldObjects;
 
 

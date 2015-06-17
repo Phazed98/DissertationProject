@@ -2,6 +2,7 @@
 
 #include "ModelBuilder.h"
 #include "ModelActor.h"
+#include "EngineUtils.h"
 
 
 // Sets default values

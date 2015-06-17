@@ -56,8 +56,49 @@ void AHandActor::checkObjects()
 
 	//Get all overlapping acotrs and store them
 	TArray<AActor*> CollectedActors;
-
 	InteractionSphere->GetOverlappingActors(CollectedActors);
+
+	TObjectIterator<AModelActor> Itr;
+	
+	//Cast Here to our type
+	AModelActor* closestObj = NULL;
+	float minDist = FLT_MAX;
+
+	//New way of doing it, first get an interator for ModelActors,
+	//Iterate through all modelActors finding the closest,
+	//If its within range set it to glowing, Detach it from its parent and attach it to this
+	//Add it to the list of held objects (Should only be 1)
+
+	for (TObjectIterator<AModelActor> Itr; Itr; ++Itr)
+	{
+		FVector ObjectLoc = Itr->GetActorLocation();
+		FVector ThisLoc = this->GetActorLocation();
+		float distance = (ThisLoc - ObjectLoc).Size();
+		Itr->ModelActorMesh->SetRenderCustomDepth(false);
+
+		if (distance < minDist)
+		{
+			minDist = distance;
+			closestObj = *Itr;
+		}
+	}
+
+	if (minDist < 300)
+	{
+		currentHeldObject = closestObj;
+		closestObj->DetachRootComponentFromParent();
+		closestObj->AttachRootComponentToActor(this, NAME_None, EAttachLocation::KeepWorldPosition, true);
+		closestObj->ModelActorMesh->SetRenderCustomDepth(true);
+		heldObjects.Add(closestObj);
+	}
+
+	/***********************************
+	Early return old code
+	************************************/
+	return;
+
+
+	int x = 0;
 
 	//For Each Actor
 	for (int x = 0; x < CollectedActors.Num(); ++x)
@@ -84,6 +125,26 @@ void AHandActor::checkObjects()
 
 void AHandActor::releaseObjects()
 {
+	//Cast Here to our type
+	AModelActor* closestObj = NULL;
+	float minDist = FLT_MAX;
+
+	for (TObjectIterator<AModelActor> Itr; Itr; ++Itr)
+	{
+		FVector ObjectLoc = Itr->GetActorLocation();
+		FVector ThisLoc = this->GetActorLocation();
+		float distance = (ThisLoc - ObjectLoc).Size();
+		//Itr->ModelActorMesh->SetRenderCustomDepth(false);
+
+		if (distance < minDist)
+		{
+			minDist = distance;
+			closestObj = *Itr;
+		}
+	}
+
+//	closestObj->ModelActorMesh->SetRenderCustomDepth(true);
+
 
 	//Get all overlapping acotrs and store them
 	TArray<AActor*> CollectedActors;
@@ -92,7 +153,7 @@ void AHandActor::releaseObjects()
 	{
 		heldObjects[x]->DetachRootComponentFromParent();
 		heldObjects[x]->connectToParent();
-		heldObjects[x]->ModelActorMesh->SetRenderCustomDepth(false);
+		//heldObjects[x]->ModelActorMesh->SetRenderCustomDepth(false);
 	}
 
 	heldObjects.Empty();
@@ -135,3 +196,12 @@ void AHandActor::releaseObjects()
 	currentHeldObject = NULL;
 }
 
+void AHandActor::disConnectAllObjects()
+{
+
+	TObjectIterator<AModelActor> Itr;
+	for (TObjectIterator<AModelActor> Itr; Itr; ++Itr)
+	{
+		Itr->DetachRootComponentFromParent();
+	}
+}

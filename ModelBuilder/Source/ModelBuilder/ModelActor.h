@@ -36,5 +36,7 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Weapon")
 		void connectToParent();
 
+
+
 	
 };
