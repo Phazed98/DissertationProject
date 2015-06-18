@@ -6,6 +6,15 @@
 #include "GameFramework/Actor.h"
 #include "HandActor.generated.h"
 
+
+enum tools
+{
+	GLUE_TOOL,
+	STRETCH_TOOL,
+	SCALE_TOOL,
+	PAINT_TOOL
+};
+
 UCLASS()
 class MODELBUILDER_API AHandActor : public AActor
 {
@@ -31,27 +40,110 @@ public:
 
 	//Interaction Sphere to determine objects that are in range to be interacted with the PSMove controller
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Hands)
-	USphereComponent* InteractionSphere;
+		USphereComponent* InteractionSphere;
 
-	//Release Sphere is slightly larger in order to release objects more garunteed
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Hands)
-		USphereComponent* ReleaseSphere;
 
-	//Should be called when Trigger is pulled
-	UFUNCTION(BlueprintCallable, Category = "Weapon")
-	void checkObjects();
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Hands)
+		FVector HandStartPosition;
 
-	//Should be called when Trigger is pulled
-	UFUNCTION(BlueprintCallable, Category = "Weapon")
-	void releaseObjects();
-
-	//Should be called when Trigger is pulled
-	UFUNCTION(BlueprintCallable, Category = "Weapon")
-		void disConnectAllObjects();
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Hands)
+		FRotator HandStartRotation;
 
 	TArray<AModelActor*> heldObjects;
 
 
 	AModelActor* currentHeldObject;
+
+	//Should be called when Trigger is pulled
+	UFUNCTION(BlueprintCallable, Category = "Weapon")
+		void setInitialValues(FVector position, FRotator rotation);
+
+	//Should be called when Trigger is pulled
+	UFUNCTION(BlueprintCallable, Category = "Weapon")
+		void checkObjects();
+
+	//Should be called when Trigger is pulled
+	UFUNCTION(BlueprintCallable, Category = "Weapon")
+		void releaseObjects();
+
+	//Should be called when Trigger is pulled
+	UFUNCTION(BlueprintCallable, Category = "Weapon")
+		void disconnectAllObjects();
+
+	//Should be called when Trigger is pulled
+	UFUNCTION(BlueprintCallable, Category = "Update")
+		void UpdateHands(FVector HandPosition, FRotator HandRotation);
+
+	void stretchObjects();
+	void stretchObjectsRelease();
+
+	tools currentTool;
+
+	bool triggerHeld;
+	FVector triggerStartPosition;
+
+	/*
+	 ____  _  _  ____  ____   __   __ _        ____  ____  ____  ____  ____  ____  ____ 
+	(  _ \/ )( \(_  _)(_  _) /  \ (  ( \      (  _ \(  _ \(  __)/ ___)/ ___)(  __)/ ___)
+	 ) _ () \/ (  )(    )(  (  O )/    /       ) __/ )   / ) _) \___ \\___ \ ) _) \___ \
+	(____/\____/ (__)  (__)  \__/ \_)__)      (__)  (__\_)(____)(____/(____/(____)(____/
+	
+	*/
+
+	//X Button Pressed and Released
+	UFUNCTION(BlueprintCallable, Category = "ButtonPress")
+		void triggerPressed(uint8 pressedAmount);
+
+	UFUNCTION(BlueprintCallable, Category = "ButtonPress")
+		void triggerReleased();
+
+	//X Button Pressed and Released
+	UFUNCTION(BlueprintCallable, Category = "ButtonPress")
+		void xPressed();
+
+	UFUNCTION(BlueprintCallable, Category = "ButtonPress")
+		void xReleased();
+
+	//Circle Button Pressed and Released
+	UFUNCTION(BlueprintCallable, Category = "ButtonPress")
+		void circlePressed();
+
+	UFUNCTION(BlueprintCallable, Category = "ButtonPress")
+		void circleReleased();
+
+	//Triangle Button Pressed and Released
+	UFUNCTION(BlueprintCallable, Category = "ButtonPress")
+		void trianglePressed();
+
+	UFUNCTION(BlueprintCallable, Category = "ButtonPress")
+		void triangleReleased();
+
+	//Square Button Pressed and Released
+	UFUNCTION(BlueprintCallable, Category = "ButtonPress")
+		void squarePressed();
+
+	UFUNCTION(BlueprintCallable, Category = "ButtonPress")
+		void squareReleased();
+
+	//Start Button Pressed and Released
+	UFUNCTION(BlueprintCallable, Category = "ButtonPress")
+		void startPressed();
+
+	UFUNCTION(BlueprintCallable, Category = "ButtonPress")
+		void startReleased();
+
+	//Select Button Pressed and Released
+	UFUNCTION(BlueprintCallable, Category = "ButtonPress")
+		void selectPressed();
+
+	UFUNCTION(BlueprintCallable, Category = "ButtonPress")
+		void selectReleased();
+
+	//PSMove Button Pressed and Released
+	UFUNCTION(BlueprintCallable, Category = "ButtonPress")
+		void movePressed();
+
+	UFUNCTION(BlueprintCallable, Category = "ButtonPress")
+		void moveReleased();
 
 };
