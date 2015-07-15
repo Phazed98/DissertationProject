@@ -17,6 +17,7 @@ AModelActor::AModelActor(const FObjectInitializer& ObjectInitializer)
 
 	//Visible Mesh
 	ModelActorMesh = ObjectInitializer.CreateDefaultSubobject<UStaticMeshComponent>(this, TEXT("HandActorMesh"));
+	ModelActorMesh->SetMobility(EComponentMobility::Movable);
 	ModelActorMesh->AttachTo(RootComponent);
 
 
@@ -24,6 +25,8 @@ AModelActor::AModelActor(const FObjectInitializer& ObjectInitializer)
 	InteractionSphere = ObjectInitializer.CreateDefaultSubobject<USphereComponent>(this, TEXT("InteractionSphere"));
 	InteractionSphere->AttachTo(RootComponent);
 	InteractionSphere->SetSphereRadius(20.0f);
+
+
 }
 
 // Called when the game starts or when spawned
@@ -90,12 +93,12 @@ void AModelActor::connectToParent()
 
 			if (distance1 < distance2)
 			{
-				this->SetActorLocation(WorldLoc1);
+				//this->SetActorLocation(WorldLoc1);
 				this->AttachRootComponentToActor(testActor, "AttachSocket1", EAttachLocation::KeepWorldPosition, true);
 			}
 			else
 			{
-				this->SetActorLocation(WorldLoc2);
+				//this->SetActorLocation(WorldLoc2);
 				this->AttachRootComponentToActor(testActor, "AttachSocket2", EAttachLocation::KeepWorldPosition, true);
 			}
 

@@ -3,6 +3,9 @@
 #include "ModelBuilder.h"
 #include "HandActor.h"
 
+#define MAX(a, b) ((a) > (b) ? (a) : (b))
+#define MIN(a, b) ((a) < (b) ? (a) : (b))
+
 
 AHandActor::AHandActor(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
@@ -24,6 +27,9 @@ AHandActor::AHandActor(const FObjectInitializer& ObjectInitializer) : Super(Obje
 
 	//Set Which tool we are currently holding
 	currentTool = GLUE_TOOL;
+	hasSelectedObject = false;
+
+	
 
 	triggerHeld = false;
 }
@@ -33,6 +39,7 @@ void AHandActor::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	TheMaterial_Dyn2 = UMaterialInstanceDynamic::Create(TheMaterial2, this);
 }
 
 // Called every frame
@@ -61,168 +68,150 @@ void AHandActor::UpdateHands(FVector HandPosition, FRotator HandRotation)
 	SetActorRelativeRotation(HandRotation);
 }
 
+void AHandActor::selectObject()
+{
+	//If already Holdinng an Object, move along
+	if (hasSelectedObject)
+		return;
+
+	AModelActor* closestObj = NULL;
+	float minDist = FLT_MAX;
+
+	//New way of doing it, first get an interator for ModelActors,
+	//Iterate through all modelActors finding the closest,
+	//If its within range set it to glowing, Detach it from its parent and attach it to this
+	//Add it to the list of held objects (Should only be 1)
+
+	for (TObjectIterator<AModelActor> Itr; Itr; ++Itr)
+	{
+		FVector ObjectLoc = Itr->GetActorLocation();
+		FVector ThisLoc = this->GetActorLocation();
+		float distance = (ThisLoc - ObjectLoc).Size();
+		Itr->ModelActorMesh->SetRenderCustomDepth(false);
+
+		if (distance < minDist)
+		{
+			minDist = distance;
+			closestObj = *Itr;
+		}
+	}
+	
+
+	if (minDist < 60)
+	{
+		currentSelectedObject = closestObj;
+		currentSelectedObject->ModelActorMesh->SetRenderCustomDepth(true);
+		currentSelectedObject->ModelActorMesh->SetMobility(EComponentMobility::Movable);
+		hasSelectedObject = true;
+	}
+}
+
+void AHandActor::deselectObject()
+{
+	
+	
+	if (hasSelectedObject)
+		currentSelectedObject->ModelActorMesh->SetRenderCustomDepth(false);
+
+	currentSelectedObject = NULL;
+	hasSelectedObject = false;
+}
+
+void AHandActor::eyDropper()
+{
+	selectObject();
+
+	if (hasSelectedObject)
+	{
+		TheMaterial_Dyn2 = UMaterialInstanceDynamic::Create(currentSelectedObject->ModelActorMesh->GetMaterial(0), this);
+		HandActorMesh->SetMaterial(0, TheMaterial_Dyn2);
+	}
+}
+
+void AHandActor::paintObject()
+{
+	selectObject();
+
+	if (hasSelectedObject)
+	{
+		//TheMaterial_Dyn = UMaterialInstanceDynamic::Create(TheMaterial, this);
+		//currentSelectedObject->ModelActorMesh->SetMaterial(0, TheMaterial_Dyn);
+
+
+		//TheMaterial_Dyn2 = UMaterialInstanceDynamic::Create(TheMaterial2, this);
+		HandActorMesh->SetMaterial(0, TheMaterial_Dyn2);
+		currentSelectedObject->ModelActorMesh->SetMaterial(0, TheMaterial_Dyn2);
+	}
+
+	deselectObject();
+}
+
 void AHandActor::stretchObjects()
 {
 	if (!triggerHeld)
 	{
 		triggerStartPosition = GetActorLocation();
+		lastPosition = GetActorLocation();
 		triggerHeld = true;
 	}
 
+	selectObject();
 
-	//If already Holdinng an Object, move along
-	if (heldObjects.Num() > 0)
-		return;
-
-	AModelActor* closestObj = NULL;
-	float minDist = FLT_MAX;
-
-	//New way of doing it, first get an interator for ModelActors,
-	//Iterate through all modelActors finding the closest,
-	//If its within range set it to glowing, Detach it from its parent and attach it to this
-	//Add it to the list of held objects (Should only be 1)
-
-	for (TObjectIterator<AModelActor> Itr; Itr; ++Itr)
+	if (hasSelectedObject)
 	{
-		FVector ObjectLoc = Itr->GetActorLocation();
-		FVector ThisLoc = this->GetActorLocation();
-		float distance = (ThisLoc - ObjectLoc).Size();
-		Itr->ModelActorMesh->SetRenderCustomDepth(false);
+		FVector endPosition = (lastPosition - GetActorLocation()) / 10;
+		FVector FinalScale = currentSelectedObject->GetActorScale() + endPosition;
+		
+		FinalScale = FVector(FinalScale.X, FinalScale.X, FinalScale.X);
 
-		if (distance < minDist)
-		{
-			minDist = distance;
-			closestObj = *Itr;
-		}
-	}
 
-	if (minDist < 900)
-	{
-		currentHeldObject = closestObj;
-		//closestObj->DetachRootComponentFromParent();
-		//closestObj->AttachRootComponentToActor(this, NAME_None, EAttachLocation::KeepWorldPosition, true);
-		closestObj->ModelActorMesh->SetRenderCustomDepth(true);
-		heldObjects.Add(closestObj);
+		//Set Minimum and Maximum Values
+		FinalScale.X = MAX(FinalScale.X, 0.25);
+		FinalScale.Y = MAX(FinalScale.Y, 0.25);
+		FinalScale.Z = MAX(FinalScale.Z, 0.25);
+
+		FinalScale.X = MIN(FinalScale.X, 3);
+		FinalScale.Y = MIN(FinalScale.Y, 3);
+		FinalScale.Z = MIN(FinalScale.Z, 3);
+
+		currentSelectedObject->SetActorRelativeScale3D(FinalScale);
+		lastPosition = GetActorLocation();
+
 	}
 }
 
 void AHandActor::stretchObjectsRelease()
 {
+	if (!hasSelectedObject)
+		return;
+
 	if (triggerHeld)
-	{
 		triggerHeld = false;
-
-		FVector endPosition = triggerStartPosition - GetActorLocation();
-		endPosition /= 10;
-		FVector FinalScale = heldObjects[0]->GetActorScale() + endPosition;
-
-		if (FinalScale.X < 0)
-		{
-			FinalScale.X = 0.25;
-		}
-		if (FinalScale.Y < 0)
-		{
-			FinalScale.Y = 0.25;
-		}
-		if (FinalScale.Z < 0)
-		{
-			FinalScale.Z = 0.25;
-		}
-
-		heldObjects[0]->SetActorRelativeScale3D(FinalScale);
-	}
 }
 
 
-void AHandActor::checkObjects()
+void AHandActor::pickupObject()
 {
-	//If already Holdinng an Object, move along
-	if (heldObjects.Num() > 0)
-		return;
+	//If we dont have an object selected get one.
+	selectObject();
 
-	AModelActor* closestObj = NULL;
-	float minDist = FLT_MAX;
-
-	//New way of doing it, first get an interator for ModelActors,
-	//Iterate through all modelActors finding the closest,
-	//If its within range set it to glowing, Detach it from its parent and attach it to this
-	//Add it to the list of held objects (Should only be 1)
-
-	for (TObjectIterator<AModelActor> Itr; Itr; ++Itr)
+	//If successfully found an Object Attach It to the handActor
+	if (hasSelectedObject)
 	{
-		FVector ObjectLoc = Itr->GetActorLocation();
-		FVector ThisLoc = this->GetActorLocation();
-		float distance = (ThisLoc - ObjectLoc).Size();
-		Itr->ModelActorMesh->SetRenderCustomDepth(false);
-
-		if (distance < minDist)
-		{
-			minDist = distance;
-			closestObj = *Itr;
-		}
+		currentSelectedObject->AttachRootComponentToActor(this, NAME_None, EAttachLocation::KeepWorldPosition, true);
+		currentSelectedObject->ModelActorMesh->SetRenderCustomDepth(true);
 	}
-
-	if (minDist < 900)
-	{
-		currentHeldObject = closestObj;
-		closestObj->DetachRootComponentFromParent();
-		closestObj->AttachRootComponentToActor(this, NAME_None, EAttachLocation::KeepWorldPosition, true);
-		closestObj->ModelActorMesh->SetRenderCustomDepth(true);
-		heldObjects.Add(closestObj);
-	}
-
-	/***********************************
-			Early return old code
-
-	Causes Issue with Parent/Child 
-	relationship as a child will return 
-	the parent object rather than itself
-
-	************************************/
-	return;
-
-
-	//Get all overlapping acotrs and store them
-	TArray<AActor*> CollectedActors;
-	InteractionSphere->GetOverlappingActors(CollectedActors);
-
-	int x = 0;
-
-	//For Each Actor
-	for (int x = 0; x < CollectedActors.Num(); ++x)
-	{
-		if (x == 0)
-		{
-			continue;
-		}
-		//Cast Here to our type
-		AModelActor* const testActor = Cast<AModelActor>(CollectedActors[x]);
-	
-		if (testActor)
-		{
-			currentHeldObject = testActor;
-			testActor->DetachRootComponentFromParent();
-			testActor->AttachRootComponentToActor(this, NAME_None, EAttachLocation::KeepWorldPosition, true);
-			testActor->ModelActorMesh->SetRenderCustomDepth(true);
-			heldObjects.Add(testActor);
-			break;
-		}
-	}
-
 }
 
 void AHandActor::releaseObjects()
 {
-	for (int x = 0; x < heldObjects.Num(); x++)
-	{
-		heldObjects[x]->DetachRootComponentFromParent();
-		heldObjects[x]->connectToParent();
-		heldObjects[x]->ModelActorMesh->SetRenderCustomDepth(false);
-	}
+	if (!hasSelectedObject)
+		return;
 
-	heldObjects.Empty();
+	currentSelectedObject->DetachRootComponentFromParent();
+	currentSelectedObject->connectToParent();
 
-	return;
+	deselectObject();
 }
 
 void AHandActor::disconnectAllObjects()
@@ -239,12 +228,16 @@ void AHandActor::triggerPressed(uint8 pressedAmount)
 	switch (currentTool)
 	{
 	case GLUE_TOOL:
-		checkObjects();
+		pickupObject();
 		break;
 	case STRETCH_TOOL:
 		stretchObjects();
 		break;
 	case SCALE_TOOL:
+		stretchObjects();
+		break;
+	case EYEDROPPER_TOOL:
+		eyDropper();
 		break;
 	case PAINT_TOOL:
 		break;
@@ -265,8 +258,12 @@ void AHandActor::triggerReleased()
 		stretchObjectsRelease();
 		break;
 	case SCALE_TOOL:
+		stretchObjectsRelease();
+		break;
+	case EYEDROPPER_TOOL:
 		break;
 	case PAINT_TOOL:
+		paintObject();
 		break;
 	default:
 		break;
@@ -283,6 +280,8 @@ void AHandActor::xPressed()
 	case STRETCH_TOOL:
 		break;
 	case SCALE_TOOL:
+		break;
+	case EYEDROPPER_TOOL:
 		break;
 	case PAINT_TOOL:
 		break;
@@ -301,6 +300,8 @@ void AHandActor::xReleased()
 		break;
 	case SCALE_TOOL:
 		break;
+	case EYEDROPPER_TOOL:
+		break;
 	case PAINT_TOOL:
 		break;
 	default:
@@ -317,6 +318,8 @@ void AHandActor::circlePressed()
 	case STRETCH_TOOL:
 		break;
 	case SCALE_TOOL:
+		break;
+	case EYEDROPPER_TOOL:
 		break;
 	case PAINT_TOOL:
 		break;
@@ -335,6 +338,8 @@ void AHandActor::circleReleased()
 		break;
 	case SCALE_TOOL:
 		break;
+	case EYEDROPPER_TOOL:
+		break;
 	case PAINT_TOOL:
 		break;
 	default:
@@ -351,6 +356,8 @@ void AHandActor::trianglePressed()
 	case STRETCH_TOOL:
 		break;
 	case SCALE_TOOL:
+		break;
+	case EYEDROPPER_TOOL:
 		break;
 	case PAINT_TOOL:
 		break;
@@ -372,6 +379,8 @@ void AHandActor::triangleReleased()
 	case SCALE_TOOL:
 		disconnectAllObjects();
 		break;
+	case EYEDROPPER_TOOL:
+		break;
 	case PAINT_TOOL:
 		disconnectAllObjects();
 		break;
@@ -390,6 +399,8 @@ void AHandActor::squarePressed()
 		break;
 	case SCALE_TOOL:
 		break;
+	case EYEDROPPER_TOOL:
+		break;
 	case PAINT_TOOL:
 		break;
 	default:
@@ -406,6 +417,8 @@ void AHandActor::squareReleased()
 	case STRETCH_TOOL:
 		break;
 	case SCALE_TOOL:
+		break;
+	case EYEDROPPER_TOOL:
 		break;
 	case PAINT_TOOL:
 		break;
@@ -424,6 +437,8 @@ void AHandActor::startPressed()
 		break;
 	case SCALE_TOOL:
 		break;
+	case EYEDROPPER_TOOL:
+		break;
 	case PAINT_TOOL:
 		break;
 	default:
@@ -440,6 +455,8 @@ void AHandActor::startReleased()
 	case STRETCH_TOOL:
 		break;
 	case SCALE_TOOL:
+		break;
+	case EYEDROPPER_TOOL:
 		break;
 	case PAINT_TOOL:
 		break;
@@ -458,6 +475,8 @@ void AHandActor::selectPressed()
 		break;
 	case SCALE_TOOL:
 		break;
+	case EYEDROPPER_TOOL:
+		break;
 	case PAINT_TOOL:
 		break;
 	default:
@@ -475,6 +494,8 @@ void AHandActor::selectReleased()
 		break;
 	case SCALE_TOOL:
 		break;
+	case EYEDROPPER_TOOL:
+		break;
 	case PAINT_TOOL:
 		break;
 	default:
@@ -491,6 +512,8 @@ void AHandActor::movePressed()
 	case STRETCH_TOOL:
 		break;
 	case SCALE_TOOL:
+		break;
+	case EYEDROPPER_TOOL:
 		break;
 	case PAINT_TOOL:
 		break;
@@ -510,6 +533,9 @@ void AHandActor::moveReleased()
 		currentTool = SCALE_TOOL;
 		break;
 	case SCALE_TOOL:
+		currentTool = EYEDROPPER_TOOL;
+		break;
+	case EYEDROPPER_TOOL:
 		currentTool = PAINT_TOOL;
 		break;
 	case PAINT_TOOL:

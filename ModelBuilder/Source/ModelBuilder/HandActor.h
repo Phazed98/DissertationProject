@@ -12,6 +12,7 @@ enum tools
 	GLUE_TOOL,
 	STRETCH_TOOL,
 	SCALE_TOOL,
+	EYEDROPPER_TOOL,
 	PAINT_TOOL
 };
 
@@ -42,17 +43,11 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Hands)
 		USphereComponent* InteractionSphere;
 
-
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Hands)
 		FVector HandStartPosition;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Hands)
 		FRotator HandStartRotation;
-
-	TArray<AModelActor*> heldObjects;
-
-
-	AModelActor* currentHeldObject;
 
 	//Should be called when Trigger is pulled
 	UFUNCTION(BlueprintCallable, Category = "Weapon")
@@ -60,7 +55,7 @@ public:
 
 	//Should be called when Trigger is pulled
 	UFUNCTION(BlueprintCallable, Category = "Weapon")
-		void checkObjects();
+		void pickupObject();
 
 	//Should be called when Trigger is pulled
 	UFUNCTION(BlueprintCallable, Category = "Weapon")
@@ -76,11 +71,36 @@ public:
 
 	void stretchObjects();
 	void stretchObjectsRelease();
+	
+	void selectObject();
+	void deselectObject(); 
 
-	tools currentTool;
+	void paintObject();
+
+	void eyDropper();
+
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Hands)
+		UMaterial* TheMaterial;
+
+	UMaterialInstanceDynamic* TheMaterial_Dyn;
+
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Hands)
+		UMaterial* TheMaterial2;
+
+	UMaterialInstanceDynamic* TheMaterial_Dyn2;
+
+
 
 	bool triggerHeld;
+	bool hasSelectedObject;
+	tools currentTool;
 	FVector triggerStartPosition;
+	FVector lastPosition;
+	AModelActor* currentSelectedObject;
+	
+	
 
 	/*
 	 ____  _  _  ____  ____   __   __ _        ____  ____  ____  ____  ____  ____  ____ 
