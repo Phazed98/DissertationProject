@@ -90,7 +90,15 @@ void AModelActor::connectToParent()
 
 			float distance1 = locationVector1.Size();
 			float distance2 = locationVector2.Size();
+			
+			
+			FVector newLoc = this->GetActorLocation();
+			newLoc.X = round(newLoc.X);
+			newLoc.Y = round(newLoc.Y);
+			newLoc.Z = round(newLoc.Z);
 
+			this->SetActorLocation(newLoc);
+			
 			if (distance1 < distance2)
 			{
 				//this->SetActorLocation(WorldLoc1);
