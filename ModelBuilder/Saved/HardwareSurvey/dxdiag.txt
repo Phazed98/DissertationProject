@@ -1,9 +1,9 @@
 ------------------
 System Information
 ------------------
-Time of this report: 6/19/2015, 14:25:59
+Time of this report: 7/20/2015, 11:02:31
        Machine name: TERRAN37
-   Operating System: Windows 7 Enterprise 64-bit (6.1, Build 7601) Service Pack 1 (7601.win7sp1_gdr.150427-0707)
+   Operating System: Windows 7 Enterprise 64-bit (6.1, Build 7601) Service Pack 1 (7601.win7sp1_gdr.150525-0603)
            Language: English (Regional Setting: English)
 System Manufacturer: VIGLEN
        System Model: DQ87PG
@@ -11,7 +11,7 @@ System Manufacturer: VIGLEN
           Processor: Intel(R) Core(TM) i7-4770 CPU @ 3.40GHz (8 CPUs), ~3.4GHz
              Memory: 16384MB RAM
 Available OS Memory: 16328MB RAM
-          Page File: 11017MB used, 21637MB available
+          Page File: 9017MB used, 23637MB available
         Windows Dir: C:\Windows
     DirectX Version: DirectX 11
 DX Setup Parameters: Not found
@@ -279,26 +279,6 @@ Sensaura(tm) ZoomFX(tm): No
 ---------------------
 Sound Capture Devices
 ---------------------
-            Description: Microphone (Realtek High Definition Audio)
-  Default Sound Capture: Yes
-  Default Voice Capture: Yes
-            Driver Name: RTKVHD64.sys
-         Driver Version: 6.00.0001.7111 (English)
-      Driver Attributes: Final Retail
-          Date and Size: 9/5/2014 18:24:59, 3771352 bytes
-              Cap Flags: 0x1
-           Format Flags: 0xFFFFF
-
-            Description: Microphone (USB Audio Device)
-  Default Sound Capture: No
-  Default Voice Capture: No
-            Driver Name: USBAUDIO.sys
-         Driver Version: 6.01.7601.18208 (English)
-      Driver Attributes: Final Retail
-          Date and Size: 7/12/2013 11:40:58, 109824 bytes
-              Cap Flags: 0x1
-           Format Flags: 0xFFFFF
-
 -------------------
 DirectInput Devices
 -------------------
@@ -312,66 +292,6 @@ Vendor/Product ID: n/a
          Attached: 1
     Controller ID: n/a
 Vendor/Product ID: n/a
-        FF Driver: n/a
-
-      Device Name: Razer DeathAdder
-         Attached: 1
-    Controller ID: 0x0
-Vendor/Product ID: 0x1532, 0x0037
-        FF Driver: n/a
-
-      Device Name: Razer DeathAdder
-         Attached: 1
-    Controller ID: 0x0
-Vendor/Product ID: 0x1532, 0x0037
-        FF Driver: n/a
-
-      Device Name: Razer DeathAdder
-         Attached: 1
-    Controller ID: 0x0
-Vendor/Product ID: 0x1532, 0x0037
-        FF Driver: n/a
-
-      Device Name: Razer DeathAdder
-         Attached: 1
-    Controller ID: 0x0
-Vendor/Product ID: 0x1532, 0x0037
-        FF Driver: n/a
-
-      Device Name: Razer BlackWidow
-         Attached: 1
-    Controller ID: 0x0
-Vendor/Product ID: 0x1532, 0x011C
-        FF Driver: n/a
-
-      Device Name: Razer BlackWidow
-         Attached: 1
-    Controller ID: 0x0
-Vendor/Product ID: 0x1532, 0x011C
-        FF Driver: n/a
-
-      Device Name: Razer BlackWidow
-         Attached: 1
-    Controller ID: 0x0
-Vendor/Product ID: 0x1532, 0x011C
-        FF Driver: n/a
-
-      Device Name: Razer BlackWidow
-         Attached: 1
-    Controller ID: 0x0
-Vendor/Product ID: 0x1532, 0x011C
-        FF Driver: n/a
-
-      Device Name: Motion Controller
-         Attached: 1
-    Controller ID: 0x0
-Vendor/Product ID: 0x054C, 0x03D5
-        FF Driver: n/a
-
-      Device Name: Motion Controller
-         Attached: 1
-    Controller ID: 0x0
-Vendor/Product ID: 0x054C, 0x03D5
         FF Driver: n/a
 
       Device Name: Motion Controller
@@ -408,43 +328,15 @@ PS/2 Devices
 | Matching Device ID: hid\vid_045e&pid_0752
 | Service: kbdhid
 | 
-+ Razer DeathAdder
-| Vendor/Product ID: 0x1532, 0x0037
-| Matching Device ID: hid\vid_1532&pid_0037&mi_01&col01
-| Upper Filters: rzudd
-| Service: kbdhid
-| 
-+ HID Keyboard Device
-| Vendor/Product ID: 0x1532, 0x0037
-| Matching Device ID: hid_device_system_keyboard
-| Service: kbdhid
-| 
-+ HID Keyboard Device
-| Vendor/Product ID: 0x1532, 0x011C
-| Matching Device ID: hid_device_system_keyboard
-| Service: kbdhid
-| 
-+ Razer BlackWidow
-| Vendor/Product ID: 0x1532, 0x011C
-| Matching Device ID: hid\vid_1532&pid_011c&mi_01&col01
-| Upper Filters: rzudd
-| Service: kbdhid
-| 
 + Terminal Server Keyboard Driver
 | Matching Device ID: root\rdp_kbd
 | Upper Filters: kbdclass
 | Service: TermDD
 | 
-+ Razer DeathAdder
-| Vendor/Product ID: 0x1532, 0x0037
-| Matching Device ID: hid\vid_1532&pid_0037&mi_00
-| Upper Filters: rzudd
-| Service: mouhid
-| 
-+ Razer BlackWidow
-| Vendor/Product ID: 0x1532, 0x011C
-| Matching Device ID: hid\vid_1532&pid_011c&mi_02
-| Upper Filters: rzudd
++ Microsoft USB Basic Optical Mouse v2.0 (Mouse and Keyboard Center)
+| Vendor/Product ID: 0x045E, 0x00CB
+| Matching Device ID: hid\vid_045e&pid_00cb
+| Upper Filters: Point64
 | Service: mouhid
 | 
 + Terminal Server Mouse Driver
@@ -456,13 +348,13 @@ PS/2 Devices
 Disk & DVD/CD-ROM Drives
 ------------------------
       Drive: C:
- Free Space: 7.2 GB
+ Free Space: 1.5 GB
 Total Space: 99.7 GB
 File System: NTFS
       Model: WDC WD10EZRX-00A8LB0 SCSI Disk Device
 
       Drive: D:
- Free Space: 189.9 GB
+ Free Space: 174.6 GB
 Total Space: 853.9 GB
 File System: NTFS
       Model: WDC WD10EZRX-00A8LB0 SCSI Disk Device
@@ -478,26 +370,6 @@ File System: NTFS
 --------------
 System Devices
 --------------
-     Name: Intel(R) Q87 LPC Controller - 8C4E
-Device ID: PCI\VEN_8086&DEV_8C4E&SUBSYS_204C8086&REV_04\3&11583659&0&F8
-   Driver: n/a
-
-     Name: Intel(R) 8 Series/C220 Series PCI Express Root Port #6 - 8C1A
-Device ID: PCI\VEN_8086&DEV_8C1A&SUBSYS_204C8086&REV_D4\3&11583659&0&E5
-   Driver: n/a
-
-     Name: High Definition Audio Controller
-Device ID: PCI\VEN_10DE&DEV_0E1A&SUBSYS_29841462&REV_A1\4&24138AE3&0&0108
-   Driver: n/a
-
-     Name: Intel(R) Active Management Technology - SOL (COM3)
-Device ID: PCI\VEN_8086&DEV_8C3D&SUBSYS_204C8086&REV_04\3&11583659&0&B3
-   Driver: n/a
-
-     Name: Intel(R) 8 Series/C220 Series PCI Express Root Port #1 - 8C10
-Device ID: PCI\VEN_8086&DEV_8C10&SUBSYS_204C8086&REV_D4\3&11583659&0&E0
-   Driver: n/a
-
      Name: Intel(R) Management Engine Interface 
 Device ID: PCI\VEN_8086&DEV_8C3A&SUBSYS_204C8086&REV_04\3&11583659&0&B0
    Driver: n/a
@@ -544,6 +416,26 @@ Device ID: PCI\VEN_8086&DEV_8C20&SUBSYS_204C8086&REV_04\3&11583659&0&D8
 
      Name: NVIDIA GeForce GTX 780 Ti 
 Device ID: PCI\VEN_10DE&DEV_100A&SUBSYS_29841462&REV_A1\4&24138AE3&0&0008
+   Driver: n/a
+
+     Name: Intel(R) Q87 LPC Controller - 8C4E
+Device ID: PCI\VEN_8086&DEV_8C4E&SUBSYS_204C8086&REV_04\3&11583659&0&F8
+   Driver: n/a
+
+     Name: Intel(R) 8 Series/C220 Series PCI Express Root Port #6 - 8C1A
+Device ID: PCI\VEN_8086&DEV_8C1A&SUBSYS_204C8086&REV_D4\3&11583659&0&E5
+   Driver: n/a
+
+     Name: High Definition Audio Controller
+Device ID: PCI\VEN_10DE&DEV_0E1A&SUBSYS_29841462&REV_A1\4&24138AE3&0&0108
+   Driver: n/a
+
+     Name: Intel(R) Active Management Technology - SOL (COM3)
+Device ID: PCI\VEN_8086&DEV_8C3D&SUBSYS_204C8086&REV_04\3&11583659&0&B3
+   Driver: n/a
+
+     Name: Intel(R) 8 Series/C220 Series PCI Express Root Port #1 - 8C10
+Device ID: PCI\VEN_8086&DEV_8C10&SUBSYS_204C8086&REV_D4\3&11583659&0&E0
    Driver: n/a
 
 ------------------
@@ -660,10 +552,6 @@ CCITT A-Law,0x00200000,1,1,quartz.dll,6.06.7601.18741
 CCITT u-Law,0x00200000,1,1,quartz.dll,6.06.7601.18741
 MPEG Layer-3,0x00200000,1,1,quartz.dll,6.06.7601.18741
 
-Audio Capture Sources:
-Microphone (Realtek High Defini,0x00200000,0,0,qcap.dll,6.06.7601.17514
-Microphone (USB Audio Device),0x00200000,0,0,qcap.dll,6.06.7601.17514
-
 PBDA CP Filters:
 PBDA DTFilter,0x00600000,1,1,CPFilters.dll,6.06.7601.17528
 PBDA ETFilter,0x00200000,0,0,CPFilters.dll,6.06.7601.17528
@@ -678,7 +566,6 @@ Realtek HD Audio Line input,0x00200000,1,1,ksproxy.ax,6.01.7601.17514
 Realtek HD Audio Mic input,0x00200000,1,1,ksproxy.ax,6.01.7601.17514
 Realtek HD Audio Stereo input,0x00200000,1,1,ksproxy.ax,6.01.7601.17514
 Razer Surround Audio Controller,0x00200000,2,2,ksproxy.ax,6.01.7601.17514
-USB Audio Device,0x00200000,1,1,ksproxy.ax,6.01.7601.17514
 
 WDM Streaming Rendering Devices:
 Realtek HD Audio output,0x00200000,1,1,ksproxy.ax,6.01.7601.17514

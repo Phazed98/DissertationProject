@@ -63,6 +63,10 @@ public:
 
 	//Should be called when Trigger is pulled
 	UFUNCTION(BlueprintCallable, Category = "Weapon")
+		void rotateObjects();
+
+	//Should be called when Trigger is pulled
+	UFUNCTION(BlueprintCallable, Category = "Weapon")
 		void disconnectAllObjects();
 
 	//Should be called when Trigger is pulled
@@ -95,9 +99,16 @@ public:
 
 	bool triggerHeld;
 	bool hasSelectedObject;
+	bool resetPosition;
+
+
 	tools currentTool;
 	FVector triggerStartPosition;
 	FVector lastPosition;
+
+	FRotator triggerStartRotation;
+	FRotator lastRotation;
+
 	AModelActor* currentSelectedObject;
 	
 	

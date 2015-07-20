@@ -29,7 +29,7 @@ AHandActor::AHandActor(const FObjectInitializer& ObjectInitializer) : Super(Obje
 	currentTool = GLUE_TOOL;
 	hasSelectedObject = false;
 
-	
+	resetPosition = true;
 
 	triggerHeld = false;
 }
@@ -38,6 +38,7 @@ AHandActor::AHandActor(const FObjectInitializer& ObjectInitializer) : Super(Obje
 void AHandActor::BeginPlay()
 {
 	Super::BeginPlay();
+	resetPosition = true;
 	
 	TheMaterial_Dyn2 = UMaterialInstanceDynamic::Create(TheMaterial2, this);
 }
@@ -58,6 +59,13 @@ void AHandActor::setInitialValues(FVector HandPosition, FRotator HandRotation)
 
 void AHandActor::UpdateHands(FVector HandPosition, FRotator HandRotation)
 {
+	if (resetPosition)
+	{
+		//Initial Values From the PSMove in Order to set position relative to
+		HandStartPosition = HandPosition;
+		HandStartRotation = HandRotation;
+		resetPosition = false;
+	}
 	//Update Relative Position
 	FVector RelativePosition = HandStartPosition - HandPosition;
 	RelativePosition *= FVector(-2.0f, -2.0f, -2.0f);
@@ -204,6 +212,40 @@ void AHandActor::pickupObject()
 	}
 }
 
+
+void AHandActor::rotateObjects()
+{
+	//If we dont have an object selected get one.
+	selectObject();
+
+	if (!triggerHeld)
+	{
+		triggerStartRotation = GetActorRotation();
+		lastRotation = GetActorRotation();
+		triggerHeld = true;
+	}
+
+	FRotator endRotation = (lastRotation - GetActorRotation());
+	FRotator finalRotation = currentSelectedObject->GetActorRotation() + endRotation;
+
+
+	currentSelectedObject->SetActorRotation(finalRotation);
+	lastRotation = GetActorRotation();
+
+	return;
+
+
+	currentSelectedObject->GetActorRotation() - this->GetActorRotation();
+
+	//If successfully found an Object Attach It to the handActor
+	if (hasSelectedObject)
+	{
+		currentSelectedObject->SetActorRotation(this->GetActorRotation());
+	}
+
+	deselectObject();
+}
+
 void AHandActor::releaseObjects()
 {
 	if (!hasSelectedObject)
@@ -235,7 +277,7 @@ void AHandActor::triggerPressed(uint8 pressedAmount)
 		stretchObjects();
 		break;
 	case SCALE_TOOL:
-		stretchObjects();
+		rotateObjects();
 		break;
 	case EYEDROPPER_TOOL:
 		eyDropper();
@@ -274,6 +316,9 @@ void AHandActor::triggerReleased()
 
 void AHandActor::xPressed()
 {
+
+	return;
+
 	switch (currentTool)
 	{
 	case GLUE_TOOL:
@@ -312,6 +357,11 @@ void AHandActor::xReleased()
 
 void AHandActor::circlePressed()
 {
+
+	resetPosition = true;
+
+	return;
+
 	switch (currentTool)
 	{
 	case GLUE_TOOL:
