@@ -97,7 +97,7 @@ void AHandActor::selectObject()
 	}
 	
 
-	if (minDist < 60)
+	if (minDist < 600)
 	{
 		currentSelectedObject = closestObj;
 		currentSelectedObject->ModelActorMesh->SetRenderCustomDepth(true);
@@ -108,8 +108,6 @@ void AHandActor::selectObject()
 
 void AHandActor::deselectObject()
 {
-	
-	
 	if (hasSelectedObject)
 		currentSelectedObject->ModelActorMesh->SetRenderCustomDepth(false);
 
@@ -148,14 +146,14 @@ void AHandActor::paintObject()
 
 void AHandActor::stretchObjects()
 {
+	selectObject();
+
 	if (!triggerHeld)
 	{
 		triggerStartPosition = GetActorLocation();
 		lastPosition = GetActorLocation();
 		triggerHeld = true;
 	}
-
-	selectObject();
 
 	if (hasSelectedObject)
 	{
@@ -187,6 +185,9 @@ void AHandActor::stretchObjectsRelease()
 
 	if (triggerHeld)
 		triggerHeld = false;
+
+
+	deselectObject();
 }
 
 
