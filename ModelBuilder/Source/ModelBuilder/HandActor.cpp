@@ -280,7 +280,7 @@ void AHandActor::triggerPressed(uint8 pressedAmount)
 		rotateObjects();
 		break;
 	case EYEDROPPER_TOOL:
-		eyDropper();
+		//eyDropper();
 		break;
 	case PAINT_TOOL:
 		break;
@@ -301,12 +301,12 @@ void AHandActor::triggerReleased()
 		stretchObjectsRelease();
 		break;
 	case SCALE_TOOL:
-		stretchObjectsRelease();
+		//stretchObjectsRelease();
 		break;
 	case EYEDROPPER_TOOL:
 		break;
 	case PAINT_TOOL:
-		paintObject();
+		//paintObject();
 		break;
 	default:
 		break;
